@@ -8,3 +8,4 @@ class RecommendationCreate(BaseModel):
     priority: str = "medium"
     confidence_score: float = 0.0
     rationale: str
+    execution_status: str = "pending"

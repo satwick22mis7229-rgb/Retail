@@ -15,6 +15,7 @@ class Recommendation(Base):
     priority = Column(String, nullable=False, default="medium")
     confidence_score = Column(Float, nullable=False, default=0.0)
     rationale = Column(Text, nullable=False)
+    execution_status = Column(String, nullable=False, default="pending")
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     product = relationship("Product", back_populates="recommendations")

@@ -14,6 +14,8 @@ class DemandForecast(Base):
     predicted_units = Column(Float, nullable=False)
     confidence_score = Column(Float, nullable=False, default=0.0)
     model_name = Column(String, nullable=False, default="baseline")
+    model_version = Column(String, nullable=False, default="v1")
+    forecast_horizon = Column(Integer, nullable=False, default=1)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     product = relationship("Product", back_populates="forecasts")

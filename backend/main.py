@@ -15,7 +15,6 @@ from app.api import (
     warehouse_router,
 )
 from app.core.config import settings
-from app.database.database import Base, engine
 from app.digital_twin.twin_engine import TwinEngine
 from app.intelligence.retail_state_engine import RetailStateEngine
 from app.models.customer import Customer
@@ -34,9 +33,6 @@ from app.models.supplier import Supplier
 from app.models.supplier_performance import SupplierPerformance
 from app.models.user import User
 from app.models.warehouse import Warehouse
-
-Base.metadata.create_all(bind=engine)
-
 
 def create_application() -> FastAPI:
     app = FastAPI(title=settings.app_name)

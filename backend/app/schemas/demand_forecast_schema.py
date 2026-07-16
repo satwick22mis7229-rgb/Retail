@@ -9,3 +9,5 @@ class DemandForecastCreate(BaseModel):
     predicted_units: float
     confidence_score: float = 0.0
     model_name: str = "baseline"
+    model_version: str = "v1"
+    forecast_horizon: int = 1

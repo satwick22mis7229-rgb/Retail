@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\SATWICK\Downloads\smart retail intelliegence platform\backend\venv"
+VIRTUAL_ENV="C:\Learning\WD\Retail\backend\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

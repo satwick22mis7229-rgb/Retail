@@ -19,3 +19,10 @@ node_modules/
 
 # Logs
 *.log
+# Backend virtual environment
+backend/venv/
+
+# Python cache
+backend/**/__pycache__/
+*.py[cod]
+backend/venv/

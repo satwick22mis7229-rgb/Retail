@@ -6,3 +6,5 @@ class CustomerCreate(BaseModel):
     email: str
     phone: str
     address: str
+    segment: str = "general"
+    loyalty_tier: str = "standard"

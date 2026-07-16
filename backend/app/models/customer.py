@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.database.database import Base
 
@@ -15,3 +16,9 @@ class Customer(Base):
     phone = Column(String)
 
     address = Column(String)
+
+    segment = Column(String, nullable=False, default="general")
+
+    loyalty_tier = Column(String, nullable=False, default="standard")
+
+    sales = relationship("Sale", back_populates="customer")

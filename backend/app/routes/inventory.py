@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.database.database import SessionLocal
 from app.models.inventory import Inventory
+from app.schemas.inventory_schema import InventoryCreate
 
 router = APIRouter(
     prefix="/inventory",
@@ -31,13 +32,16 @@ def get_inventory(db: Session = Depends(get_db)):
 
 @router.post("/")
 def add_inventory(
-    product_id: int,
-    quantity: int,
+    inventory: InventoryCreate,
     db: Session = Depends(get_db)
 ):
     item = Inventory(
-        product_id=product_id,
-        quantity=quantity
+        product_id=inventory.product_id,
+        warehouse_id=inventory.warehouse_id,
+        shelf_id=inventory.shelf_id,
+        quantity=inventory.quantity,
+        reserved_quantity=inventory.reserved_quantity,
+        reorder_threshold=inventory.reorder_threshold,
     )
 
     db.add(item)

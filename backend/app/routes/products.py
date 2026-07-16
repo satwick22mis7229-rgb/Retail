@@ -51,9 +51,14 @@ def update_product(
 
     db_product.name = product.name
     db_product.sku = product.sku
+    db_product.category = product.category
     db_product.price = product.price
     db_product.cost_price = product.cost_price
     db_product.description = product.description
+    db_product.safety_stock = product.safety_stock
+    db_product.reorder_point = product.reorder_point
+    db_product.reorder_quantity = product.reorder_quantity
+    db_product.preferred_supplier_id = product.preferred_supplier_id
 
     db.commit()
     db.refresh(db_product)
@@ -67,9 +72,14 @@ def create_product(
     new_product = Product(
         name=product.name,
         sku=product.sku,
+        category=product.category,
         price=product.price,
         cost_price=product.cost_price,
-        description=product.description
+        description=product.description,
+        safety_stock=product.safety_stock,
+        reorder_point=product.reorder_point,
+        reorder_quantity=product.reorder_quantity,
+        preferred_supplier_id=product.preferred_supplier_id,
     )
 
     db.add(new_product)

@@ -22,7 +22,9 @@ def create_supplier(
         name=supplier.name,
         email=supplier.email,
         phone=supplier.phone,
-        address=supplier.address
+        address=supplier.address,
+        lead_time_days=supplier.lead_time_days,
+        reliability_score=supplier.reliability_score,
     )
 
     db.add(new_supplier)

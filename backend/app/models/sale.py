@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, Float, ForeignKey
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 
 from app.database.database import Base
 
@@ -10,14 +12,29 @@ class Sale(Base):
 
     customer_id = Column(
         Integer,
-        ForeignKey("customers.id")
+        ForeignKey("customers.id"),
+        nullable=False,
     )
 
     product_id = Column(
         Integer,
-        ForeignKey("products.id")
+        ForeignKey("products.id"),
+        nullable=False,
     )
 
-    quantity = Column(Integer)
+    warehouse_id = Column(
+        Integer,
+        ForeignKey("warehouses.id"),
+    )
 
-    total_amount = Column(Float)
+    quantity = Column(Integer, nullable=False)
+
+    unit_price = Column(Float, nullable=False, default=0.0)
+
+    total_amount = Column(Float, nullable=False, default=0.0)
+
+    sold_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
+
+    customer = relationship("Customer", back_populates="sales")
+    product = relationship("Product", back_populates="sales")
+    warehouse = relationship("Warehouse", back_populates="sales")

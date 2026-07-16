@@ -74,23 +74,6 @@ def delete_sale(
     db.commit()
 
     return {"message": "Deleted"}
-@router.get("/report")
-def download_report(db: Session = Depends(get_db)):
-    sales = db.query(Sale).all()
-
-    data = []
-
-    for sale in sales:
-        data.append({
-            "id": sale.id,
-            "customer": sale.customer_id,
-            "product": sale.product_id,
-            "quantity": sale.quantity,
-            "amount": sale.total_amount
-        })
-
-    return data
-
 @router.post("/")
 def create_sale(
     sale: SaleCreate,
@@ -142,13 +125,16 @@ def create_sale(
 
     inventory.quantity -= sale.quantity
 
-    total = product.price * sale.quantity
+    unit_price = sale.unit_price or product.price
+    total = sale.total_amount or (unit_price * sale.quantity)
 
     new_sale = Sale(
         customer_id=sale.customer_id,
         product_id=sale.product_id,
+        warehouse_id=sale.warehouse_id or inventory.warehouse_id,
         quantity=sale.quantity,
-        total_amount=total
+        unit_price=unit_price,
+        total_amount=total,
     )
 
     db.add(new_sale)

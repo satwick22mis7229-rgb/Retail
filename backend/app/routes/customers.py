@@ -22,7 +22,9 @@ def create_customer(
         name=customer.name,
         email=customer.email,
         phone=customer.phone,
-        address=customer.address
+        address=customer.address,
+        segment=customer.segment,
+        loyalty_tier=customer.loyalty_tier,
     )
 
     db.add(new_customer)

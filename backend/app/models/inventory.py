@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.database.database import Base
@@ -11,9 +11,32 @@ class Inventory(Base):
 
     product_id = Column(
         Integer,
-        ForeignKey("products.id")
+        ForeignKey("products.id"),
+        nullable=False,
     )
 
-    quantity = Column(Integer, default=0)
+    warehouse_id = Column(
+        Integer,
+        ForeignKey("warehouses.id"),
+        nullable=False,
+    )
 
-    product = relationship("Product")
+    shelf_id = Column(
+        Integer,
+        ForeignKey("shelves.id"),
+    )
+
+    quantity = Column(Integer, nullable=False, default=0)
+
+    reserved_quantity = Column(Integer, nullable=False, default=0)
+
+    reorder_threshold = Column(Integer, nullable=False, default=0)
+
+    stockout_risk = Column(Float, nullable=False, default=0.0)
+
+    status = Column(String, nullable=False, default="in_stock")
+
+    product = relationship("Product", back_populates="inventory_items")
+    warehouse = relationship("Warehouse", back_populates="inventory_items")
+    shelf = relationship("Shelf", back_populates="inventory_items")
+    events = relationship("InventoryEvent", back_populates="inventory")

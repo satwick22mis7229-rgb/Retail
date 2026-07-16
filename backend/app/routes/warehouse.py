@@ -19,8 +19,10 @@ def create_warehouse(
     db: Session = Depends(get_db)
 ):
     data = Warehouse(
+        store_id=warehouse.store_id,
         name=warehouse.name,
-        location=warehouse.location
+        location=warehouse.location,
+        capacity=warehouse.capacity,
     )
 
     db.add(data)

@@ -1,61 +1,78 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.models.product import Product
-from app.routes.products import router as product_router
-from app.models.inventory import Inventory
-from app.routes.inventory import router as inventory_router
-from app.models.customer import Customer
-from app.routes.customers import router as customer_router
-from app.models.sale import Sale
-from app.routes.sales import router as sales_router
-from app.models.supplier import Supplier
-from app.routes.suppliers import router as supplier_router
-from app.models.warehouse import Warehouse
-from app.routes.warehouse import router as warehouse_router
-from app.routes.dashboard import router as dashboard_router
-
-from app.database.database import (
-    Base,
-    engine
+from app.api import (
+    assistant_router,
+    customer_router,
+    dashboard_router,
+    digital_twin_router,
+    forecast_router,
+    inventory_router,
+    product_router,
+    sales_router,
+    simulation_router,
+    supplier_router,
+    warehouse_router,
 )
-
+from app.core.config import settings
+from app.database.database import Base, engine
+from app.digital_twin.twin_engine import TwinEngine
+from app.intelligence.retail_state_engine import RetailStateEngine
+from app.models.customer import Customer
+from app.models.inventory import Inventory
+from app.models.product import Product
+from app.models.sale import Sale
+from app.models.supplier import Supplier
 from app.models.user import User
-
+from app.models.warehouse import Warehouse
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(
-    title="Smart Retail Platform"
-)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:5175"
-    ],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-app.include_router(
-    dashboard_router,
-    prefix="/dashboard",
-    tags=["Dashboard"]
-)
 
-app.include_router(product_router)
-app.include_router(inventory_router)
-app.include_router(customer_router)
-app.include_router(sales_router)
-app.include_router(supplier_router)
-app.include_router(warehouse_router)
-app.include_router(dashboard_router)
+def create_application() -> FastAPI:
+    app = FastAPI(title=settings.app_name)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(product_router)
+    app.include_router(inventory_router)
+    app.include_router(customer_router)
+    app.include_router(sales_router)
+    app.include_router(supplier_router)
+    app.include_router(warehouse_router)
+    app.include_router(dashboard_router)
+    app.include_router(digital_twin_router)
+    app.include_router(forecast_router)
+    app.include_router(simulation_router)
+    app.include_router(assistant_router)
+
+    retail_state_engine = RetailStateEngine()
+    twin_engine = TwinEngine(retail_state_engine=retail_state_engine)
+
+    @app.get("/")
+    def home():
+        return {
+            "message": "Smart Retail API Running",
+            "platform": "AI-Native Smart Retail Digital Twin Platform",
+            "phase": "Module 1 - Repository Audit & Architecture Stabilization",
+            "available_domains": [
+                "retail_management",
+                "retail_intelligence",
+                "digital_twin",
+                "forecasting",
+                "simulation",
+                "assistant",
+            ],
+            "digital_twin_ready": twin_engine.describe()["status"],
+        }
+
+    return app
 
 
-@app.get("/")
-def home():
-    return {
-        "message": "Smart Retail API Running"
-    }
+app = create_application()
